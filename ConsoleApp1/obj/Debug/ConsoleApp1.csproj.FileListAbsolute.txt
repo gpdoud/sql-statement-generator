@@ -4,3 +4,9 @@ c:\users\max-student\documents\visual studio 2017\Projects\ConsoleApp1\ConsoleAp
 c:\users\max-student\documents\visual studio 2017\Projects\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.csprojResolveAssemblyReference.cache
 c:\users\max-student\documents\visual studio 2017\Projects\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.exe
 c:\users\max-student\documents\visual studio 2017\Projects\ConsoleApp1\ConsoleApp1\obj\Debug\ConsoleApp1.pdb
+C:\repos\SqlStatementGenertor\ConsoleApp1\bin\Debug\ConsoleApp1.exe.config
+C:\repos\SqlStatementGenertor\ConsoleApp1\bin\Debug\ConsoleApp1.exe
+C:\repos\SqlStatementGenertor\ConsoleApp1\bin\Debug\ConsoleApp1.pdb
+C:\repos\SqlStatementGenertor\ConsoleApp1\obj\Debug\ConsoleApp1.csprojResolveAssemblyReference.cache
+C:\repos\SqlStatementGenertor\ConsoleApp1\obj\Debug\ConsoleApp1.exe
+C:\repos\SqlStatementGenertor\ConsoleApp1\obj\Debug\ConsoleApp1.pdb

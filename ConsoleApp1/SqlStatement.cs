@@ -8,20 +8,55 @@ namespace ConsoleApp1
 {
     public class SqlStatement
     {
-        private string tablename;
-        private List<string> columns = new List<string>();
-        private string whereClause;
-        private List<string> orderByClauses = new List<string>();
+        public string Tablename { get; set; }
+        public List<string> Columns = new List<string>();
+        public string WhereClause { get; set; }
+        public List<string> OrderByClauses = new List<string>();
 
+        public string ToUpdate() {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("UPDATE ");
+            sb.Append(" [" + this.Tablename + "] ");
+            sb.Append(" SET ");
+            List<string> updateColumns = new List<string>();
+            foreach(string column in this.Columns) {
+                if (column.ToLower().Equals("Id".ToLower())) // skip updating ID
+                    continue;
+                updateColumns.Add($"{column} = @{column}");
+            }
+            sb.Append(string.Join(", ", updateColumns));
+            sb.Append(" WHERE Id = @Id");
+            return sb.ToString();
+        }
+        public string ToInsert() {
+            StringBuilder sb = new StringBuilder();
+            var columnsNoId = new List<string>();
+            foreach(string column in this.Columns) {
+                if (column.ToLower().Equals("Id".ToLower()))
+                    continue;
+                columnsNoId.Add(column);
+            }
+            sb.Append("INSERT ");
+            sb.Append(" [" + this.Tablename + "] ");
+            sb.Append("(");
+            string columnList = "[" + string.Join("],[", columnsNoId) + "]";
+            sb.Append(" " + columnList);
+            sb.Append(") VALUES (");
+            string parameterList = "@" + string.Join(", @", columnsNoId);
+            sb.Append(parameterList);
+            sb.Append(")");
+
+            return sb.ToString();
+        }
         public string ToDelete()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("DELETE ");
-            sb.Append(" FROM [" + this.tablename + "]");
-            if (whereClause != null)
+            sb.Append(" FROM [" + this.Tablename + "]");
+            if (WhereClause != null)
             {
                 sb.Append(" WHERE (");
-                sb.Append(this.whereClause);
+                sb.Append(this.WhereClause);
                 sb.Append(") ");
             }
             return sb.ToString();
@@ -30,28 +65,28 @@ namespace ConsoleApp1
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("SELECT ");
-            if(this.columns.Count == 0)
+            if(this.Columns.Count == 0)
             {
                 sb.Append(" * ");
             } else
             {
-                string columnList = "[" + string.Join("],[", this.columns) + "]";
+                string columnList = "[" + string.Join("],[", this.Columns) + "]";
                 sb.Append(" " + columnList);
             }
-            sb.Append(" FROM ["+this.tablename+"]");
+            sb.Append(" FROM ["+this.Tablename + "]");
 
-            if(whereClause != null)
+            if(WhereClause != null)
             {
                 sb.Append(" WHERE (");
-                sb.Append(this.whereClause);
+                sb.Append(this.WhereClause);
                 sb.Append(") ");
             }
-            if(orderByClauses.Count != 0)
+            if(OrderByClauses.Count != 0)
             {
                 sb.Append(" ORDER BY ");
-                foreach(string orderClause in this.orderByClauses)
+                foreach(string orderClause in this.OrderByClauses)
                 {
-                    string orderclause = string.Join(",", this.orderByClauses);
+                    string orderclause = string.Join(",", this.OrderByClauses);
                     sb.Append(orderclause);
                 }
 
@@ -62,24 +97,36 @@ namespace ConsoleApp1
         public SqlStatement(string tablename, string[] columns, string whereClause, string[] orderColumns)
         {
             // table
-            this.tablename = tablename;
+            this.Tablename = tablename;
             // column list
             if(columns != null)
             {
                 foreach (string column in columns)
-                    this.columns.Add(column);
+                    this.Columns.Add(column);
             }
             // where clause
-            this.whereClause = whereClause;
+            this.WhereClause = whereClause;
             // order by
             if(orderColumns != null)
             {
                 foreach(string column in orderColumns)
-                    this.orderByClauses.Add(column);
+                    this.OrderByClauses.Add(column);
             }
         }
-        public SqlStatement()
-        {
+        public SqlStatement(string tablename, string[] columns, string[] orderColumns) 
+            : this(tablename, columns, null, orderColumns) {
+
+        }
+        public SqlStatement(string tablename, string[] columns, string whereClause) 
+            : this(tablename, columns, whereClause, null) {
+
+        }
+        public SqlStatement(string tablename, string[] columns) 
+            : this(tablename, columns, null, null) {
+
+        }
+        public SqlStatement(string tablename) 
+            : this(tablename, null) {
 
         }
     }
